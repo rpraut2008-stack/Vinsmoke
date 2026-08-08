@@ -1,308 +1,368 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Sorry ❤️</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Effects of Urea on Plant Growth</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --slide-border: #1f5f3a;
+      --heading: #15472b;
+      --text: #1d1d1d;
+      --paper: #ffffff;
+      --page: #f0f4ef;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    * { box-sizing: border-box; }
 
-<style>
     body {
-        margin:0;
-        background: #0d0017;
-        font-family: 'Poppins', sans-serif;
-        overflow:hidden;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      padding: 18px 0 30px;
     }
 
-    /* Pink fog */
-    #fog {
-        position:absolute;
-        width:200%;
-        height:200%;
-        background:radial-gradient(circle, rgba(255,120,160,0.15), transparent 70%);
-        filter:blur(80px);
-        animation:fogMove 18s infinite linear;
-        z-index:0;
-    }
-    @keyframes fogMove {
-        0% { transform:translate(-20%, -20%); }
-        50% { transform:translate(10%, 10%); }
-        100% { transform:translate(-20%, -20%); }
+    .deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
     }
 
-    canvas {
-        position:absolute;
-        top:0; left:0;
-        width:100vw;
-        height:100vh;
-        z-index:2;
-        transition: transform 1.3s ease-in-out;
-    }
-    .heartBeat { animation:beat 1.8s infinite ease-in-out; }
-    @keyframes beat {
-        0% { transform:scale(1); }
-        25% { transform:scale(1.03); }
-        50% { transform:scale(1); }
-        75% { transform:scale(1.04); }
-        100% { transform:scale(1); }
+    .slide {
+      width: min(94vw, calc(94vh * 9 / 16));
+      aspect-ratio: 9 / 16;
+      background: var(--paper);
+      border: 4px solid var(--slide-border);
+      border-radius: 8px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .floatHeart {
-        position:absolute;
-        color:rgba(255,80,120,0.50);
-        font-size:20px;
-        animation: floatUp 6s linear infinite;
-        text-shadow:0 0 10px rgba(255,0,0,0.5);
-        z-index:4;
-    }
-    @keyframes floatUp {
-        0% { transform:translateY(0) scale(1); opacity:1; }
-        100% { transform:translateY(-300px) scale(1.6); opacity:0; }
+    h1, h2 {
+      margin: 0;
+      text-align: center;
+      color: var(--heading);
+      letter-spacing: 0.2px;
+      font-weight: 700;
     }
 
-    /* MESSAGE */
-    #messageBox {
-        position:absolute;
-        width:60vw;
-        max-width:520px;
-        text-align:center;
-        left:50%;
-        top:45%;   /* stays inside heart */
-        transform:translate(-50%, -50%);
-        color:#ff3d63;
-        font-size:17px;
-        line-height:1.45;
-        text-shadow:0 0 12px rgba(255,0,60,0.8);
-        z-index:6;
-    }
-    #typing { white-space: pre-line; }
+    h1 { font-size: clamp(1.15rem, 3.7vw, 1.55rem); line-height: 1.3; }
+    h2 { font-size: clamp(1.05rem, 3.3vw, 1.35rem); margin-bottom: 8px; }
 
-    /* SORRY — now PERFECT MIDDLE */
-    #sorry {
-        position:absolute;
-        bottom:120px;   /* PERFECT SPOT between message & button */
-        width:100%;
-        text-align:center;
-        font-family:'Pacifico', cursive;
-        font-size:65px;
-        color:#ff7ab4;
-        text-shadow:0 0 20px rgba(255,120,170,0.6);
-        z-index:6;
+    p, li {
+      font-size: clamp(0.75rem, 2.35vw, 0.95rem);
+      line-height: 1.42;
+      margin: 0;
     }
 
-    #forgiveBtn {
-        position:absolute;
-        bottom:55px;  /* stays below SORRY */
-        left:50%;
-        transform:translateX(-50%);
-        padding:12px 26px;
-        background:#ff6aa9;
-        color:white;
-        border:none;
-        border-radius:40px;
-        font-size:18px;
-        cursor:pointer;
-        z-index:6;
+    ul, ol {
+      margin: 6px 0 0 18px;
+      padding: 0;
+      display: grid;
+      gap: 5px;
     }
 
-    #thankYou, #loveYou {
-        position:absolute;
-        left:50%;
-        top:50%;
-        transform:translate(-50%, -50%);
-        font-family:'Pacifico', cursive;
-        font-size:70px;
-        color:#ff4a6e;
-        white-space:pre;
-        display:none;
-        text-shadow:0 0 25px rgba(255,40,70,0.9);
-        z-index:30;
+    .content {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
     }
 
-    #moreBtn {
-        position:absolute;
-        bottom:25px;
-        left:50%;
-        transform:translateX(-50%);
-        padding:12px 26px;
-        background:#ff3d63;
-        color:white;
-        border:none;
-        border-radius:40px;
-        font-size:18px;
-        cursor:pointer;
-        display:none;
-        z-index:20;
+    .media-box {
+      margin-top: auto;
+      border: 2px dashed #2f7c4f;
+      border-radius: 6px;
+      min-height: 22%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-size: clamp(0.72rem, 2.15vw, 0.88rem);
+      color: #2f7c4f;
+      padding: 10px;
+      background: #f8fcf8;
     }
 
-    .petal {
-        position:absolute;
-        width:18px;
-        height:18px;
-        background:url('https://i.imgur.com/0Q9Y9Hk.png') no-repeat center/contain;
-        animation: fall 4s linear forwards;
-        z-index:200;
-    }
-    @keyframes fall {
-        0% { transform:translateY(-50px) rotate(0deg); }
-        100% { transform:translateY(120vh) rotate(360deg); opacity:0; }
+
+    .media-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
     }
 
-</style>
+    .title-slide {
+      justify-content: center;
+      text-align: center;
+      gap: 14px;
+    }
+
+    .subtitle {
+      font-size: clamp(0.82rem, 2.5vw, 1rem);
+      line-height: 1.45;
+    }
+
+    .thank-you {
+      justify-content: center;
+      text-align: center;
+      gap: 14px;
+    }
+  </style>
 </head>
-
 <body>
+  <main class="deck">
+    <section class="slide title-slide">
+      <h1>Effects of Urea on Plant Growth</h1>
+      <p class="subtitle">A student project explaining how urea influences seed germination, plant health, and sustainable farming practices.</p>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/crop-field/960/540" alt="Image placeholder: healthy crop with fertilizer treatment comparison"></div>
+    </section>
 
-<div id="fog"></div>
+    <section class="slide">
+      <h2>Introduction</h2>
+      <div class="content">
+        <p>Plants require essential nutrients to complete their life cycle, and nitrogen is one of the most important among them. Urea is a commonly used nitrogen fertilizer because it is concentrated, affordable, and easy to transport. Farmers use it to improve leaf growth, chlorophyll production, and crop productivity.</p>
+        <p>This project studies how urea helps plants when applied correctly and how misuse can reduce soil quality, harm roots, and pollute nearby water sources.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/urea-granules/960/540" alt="Image placeholder: urea granules in hand near young plants"></div>
+    </section>
 
-<canvas id="c" class="heartBeat"></canvas>
+    <section class="slide">
+      <h2>Aim of the Project</h2>
+      <div class="content">
+        <p>The main aim is to observe and compare plant growth under different urea doses and identify the amount that supports healthy development.</p>
+        <ul>
+          <li>Compare germination rate in control and treated groups.</li>
+          <li>Measure differences in stem length, leaf number, and plant color.</li>
+          <li>Understand safe and responsible use of chemical fertilizer.</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/plant-experiment/960/540" alt="Image placeholder: classroom experiment setup with labeled pots"></div>
+    </section>
 
-<div id="messageBox"><div id="typing"></div></div>
+    <section class="slide">
+      <h2>Hypothesis</h2>
+      <div class="content">
+        <p>If urea is applied in a balanced quantity, then plants will show better growth due to improved nitrogen availability for protein and chlorophyll synthesis.</p>
+        <p>If urea is applied in excess, then germination and growth will decline because high salt concentration and ammonia release may injure roots and disturb nutrient balance.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/fertilizer-dose/960/540" alt="Image placeholder: comparison of moderate and excessive fertilizer effects"></div>
+    </section>
 
-<div id="sorry">SORRY</div>
-<button id="forgiveBtn">Will you forgive me?</button>
+    <section class="slide">
+      <h2>Germination of Seeds</h2>
+      <div class="content">
+        <p>Germination is the process in which a seed resumes metabolic activity and develops into a seedling. It begins with water absorption (imbibition), followed by enzyme activation, and ends when the radicle and plumule emerge.</p>
+        <p>Successful germination depends on favorable environmental conditions and a viable embryo.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/seed-germination/960/540" alt="Image placeholder: stages of seed germination illustration"></div>
+    </section>
 
-<div id="thankYou"></div>
-<button id="moreBtn">Ek aur baat bolni thi 👉👈 , Boldu kya??</button>
+    <section class="slide">
+      <h2>Factors Affecting Seed Germination</h2>
+      <div class="content">
+        <p>Seed germination depends on two major groups of factors:</p>
+        <ul>
+          <li><strong>External factors:</strong> water, oxygen, temperature, light, and soil condition.</li>
+          <li><strong>Internal factors:</strong> vitality, longevity (viability), and dormancy status.</li>
+        </ul>
+        <p>Both groups must support the seed for consistent and uniform growth.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/germination-factors/960/540" alt="Image placeholder: chart of external and internal factors"></div>
+    </section>
 
-<div id="loveYou"></div>
+    <section class="slide">
+      <h2>External Factors</h2>
+      <div class="content">
+        <p>External factors are environmental conditions around a seed. Even healthy seeds fail when one or more conditions are unsuitable.</p>
+        <ul>
+          <li>Water</li>
+          <li>Oxygen</li>
+          <li>Temperature</li>
+          <li>Light</li>
+          <li>Soil structure and pH</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/environment-factors/960/540" alt="Image placeholder: icons for water oxygen temperature and light"></div>
+    </section>
 
-<script>
+    <section class="slide">
+      <h2>Water</h2>
+      <div class="content">
+        <p>Water softens the seed coat, activates hydrolytic enzymes, and supports movement of dissolved food reserves to the growing embryo.</p>
+        <p>Insufficient water delays germination, while excessive water can reduce oxygen availability and cause seed decay due to fungal growth.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/watering-seedlings/960/540" alt="Image placeholder: seed receiving measured watering"></div>
+    </section>
 
-/* HEART CANVAS */
-const canvas = document.getElementById("c");
-const ctx = canvas.getContext("2d");
+    <section class="slide">
+      <h2>Oxygen</h2>
+      <div class="content">
+        <p>Germinating seeds require oxygen for aerobic respiration. Respiration releases energy needed for cell division, tissue expansion, and root emergence.</p>
+        <p>Compacted or waterlogged soil lowers oxygen diffusion and can significantly reduce germination percentage.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/soil-oxygen/960/540" alt="Image placeholder: root zone aeration in soil"></div>
+    </section>
 
-function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
-resize(); onresize = resize;
+    <section class="slide">
+      <h2>Temperature</h2>
+      <div class="content">
+        <p>Temperature controls enzyme activity and metabolic speed. Each species has a minimum, optimum, and maximum range for germination.</p>
+        <p>Very low temperature slows reactions, while high temperature may denature enzymes and damage embryonic tissues.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/temperature-greenhouse/960/540" alt="Image placeholder: thermometer beside seedling tray"></div>
+    </section>
 
-function hx(t){ return 15 * Math.sin(t)**3; }
-function hy(t){
-    return 12*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
-}
+    <section class="slide">
+      <h2>Light</h2>
+      <div class="content">
+        <p>Some seeds are positively photoblastic and germinate better in light, while others germinate better in darkness. Light can influence hormone balance and early shoot orientation.</p>
+        <p>Correct light conditions after sprouting are also essential for healthy photosynthesis and strong seedlings.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/sunlight-seedlings/960/540" alt="Image placeholder: seedlings under sunlight and shade"></div>
+    </section>
 
-const pts = [];
-for(let i=0;i<1200;i++){
-    const t = i/1199 * Math.PI*2;
-    pts.push({x:hx(t), y:hy(t)});
-}
+    <section class="slide">
+      <h2>Internal Factors</h2>
+      <div class="content">
+        <p>Internal factors are properties of the seed itself. Even with ideal surroundings, weak or dormant seeds may not germinate uniformly.</p>
+        <ul>
+          <li>Vitality of the embryo</li>
+          <li>Longevity or viability over storage time</li>
+          <li>Dormancy due to physiological or structural causes</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/seed-anatomy/960/540" alt="Image placeholder: seed anatomy cross section"></div>
+    </section>
 
-let prog=0,last=0;
+    <section class="slide">
+      <h2>Vitality, Longevity, and Dormancy</h2>
+      <div class="content">
+        <ul>
+          <li><strong>Vitality:</strong> Capacity of a seed to produce a vigorous seedling.</li>
+          <li><strong>Longevity (Viability):</strong> Ability to remain alive and germinable during storage.</li>
+          <li><strong>Dormancy:</strong> Temporary failure to germinate despite apparently favorable external conditions.</li>
+        </ul>
+        <p>Understanding these factors helps in selecting good seeds for experiments and farming.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/dormancy-seeds/960/540" alt="Image placeholder: dormant seed and germinated seed comparison"></div>
+    </section>
 
-function draw(now){
-    if(!last) last=now;
-    prog+= (now-last)/1000 * 0.25;
-    last=now;
-    if(prog>1) prog=1;
+    <section class="slide">
+      <h2>Urea and Its Effects on Plants</h2>
+      <div class="content">
+        <p>Urea (CO(NH<sub>2</sub>)<sub>2</sub>) contains a high percentage of nitrogen. In soil, microbes convert urea to ammonium and then to nitrate, which plants absorb as nutrients.</p>
+        <p>At the right dose, urea increases leaf area, chlorophyll content, and biomass. At high dose, it can stress roots, scorch leaves, and disturb nutrient uptake.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/nitrogen-cycle/960/540" alt="Image placeholder: nitrogen cycle from urea to plant uptake"></div>
+    </section>
 
-    ctx.clearRect(0,0,innerWidth,innerHeight);
+    <section class="slide">
+      <h2>How to Use Urea</h2>
+      <div class="content">
+        <ul>
+          <li>Apply measured quantities according to plant type and growth stage.</li>
+          <li>Place urea near root zone and mix lightly into soil to reduce nitrogen loss.</li>
+          <li>Water soon after application so nutrients move into root-accessible soil.</li>
+          <li>Avoid applying on very dry leaves or during intense heat.</li>
+        </ul>
+        <p>Proper timing and dosage maximize benefits and reduce damage.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/farmer-fertilizer/960/540" alt="Image placeholder: farmer applying measured fertilizer"></div>
+    </section>
 
-    const cx=innerWidth/2, cy=innerHeight/2+40;
-    const scale=Math.min(innerWidth,innerHeight)/22;
+    <section class="slide">
+      <h2>Advantages of Urea</h2>
+      <div class="content">
+        <ul>
+          <li>High nitrogen content supports rapid vegetative growth.</li>
+          <li>Improves leaf greenness by boosting chlorophyll synthesis.</li>
+          <li>Cost-effective and widely available for different crop systems.</li>
+          <li>Easy to store and transport because of granular form.</li>
+          <li>Increases yield when combined with balanced nutrient management.</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/healthy-crops/960/540" alt="Image placeholder: healthy green field after balanced fertilization"></div>
+    </section>
 
-    ctx.beginPath();
-    pts.forEach((p,i)=>{
-        const x=cx+p.x*scale, y=cy-p.y*scale;
-        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    });
-    ctx.closePath();
-    ctx.fillStyle="rgba(255,120,170,0.2)";
-    ctx.fill();
+    <section class="slide">
+      <h2>Negative Effects of Chemical Fertilizers</h2>
+      <div class="content">
+        <p>Overuse of chemical fertilizers, including urea, may cause soil acidification, nutrient imbalance, and reduced microbial diversity.</p>
+        <ul>
+          <li>Nitrate leaching can contaminate groundwater.</li>
+          <li>Runoff can promote eutrophication in ponds and rivers.</li>
+          <li>Repeated over-application can weaken long-term soil health.</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/fertilizer-runoff/960/540" alt="Image placeholder: fertilizer runoff to water body"></div>
+    </section>
 
-    ctx.beginPath();
-    ctx.lineWidth=5; ctx.lineCap="round";
-    ctx.strokeStyle="#ff5b9a";
-    const upto=Math.floor(prog*(pts.length-1));
-    for(let i=0;i<=upto;i++){
-        const p=pts[i];
-        const x=cx+p.x*scale, y=cy-p.y*scale;
-        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    }
-    ctx.stroke();
+    <section class="slide">
+      <h2>Apparatus Required</h2>
+      <div class="content">
+        <ul>
+          <li>Uniform seeds (same species and batch)</li>
+          <li>Pots or trays with equal soil quantity</li>
+          <li>Urea fertilizer, measuring spoon, and labels</li>
+          <li>Watering can, ruler, notebook, and pen</li>
+          <li>Gloves for safe handling</li>
+        </ul>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/lab-materials/960/540" alt="Image placeholder: experiment materials arranged on table"></div>
+    </section>
 
-    requestAnimationFrame(draw);
-}
-requestAnimationFrame(draw);
+    <section class="slide">
+      <h2>Procedure</h2>
+      <div class="content">
+        <ol>
+          <li>Fill pots with equal soil and sow equal number of seeds.</li>
+          <li>Create one control group (no urea) and multiple treatment groups with increasing urea doses.</li>
+          <li>Maintain equal watering, light exposure, and temperature for all groups.</li>
+          <li>Record germination count, plant height, and leaf number daily or every two days.</li>
+          <li>Continue observations for at least 2–3 weeks.</li>
+        </ol>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/plant-procedure/960/540" alt="Image placeholder: stepwise pot experiment workflow"></div>
+    </section>
 
-/* TYPING */
-const msg =
-`I’m really sorry for what I said earlier.
-Mera intention bilkul galat nahi tha, bas baat ko mazaak mein bol diya aur wo wrong way mein chali gayi.
-I genuinely didn’t want to hurt you.
-Tu important hai yaar, isliye jab tujhe bura laga toh mujhe bhi feel hua.
-Aage se main dhyaan rakhunga. Ek baar phirse sorrry madam 🥺`;
+    <section class="slide">
+      <h2>Observation</h2>
+      <div class="content">
+        <p>Plants receiving a moderate urea dose generally showed quicker growth, greener leaves, and stronger stems than the control group.</p>
+        <p>Plants in high-dose groups showed symptoms such as leaf tip burn, pale patches, or reduced growth rate after initial response.</p>
+        <p>This indicates that dose selection is critical for beneficial outcomes.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/plant-observation/960/540" alt="Image placeholder: growth comparison table across treatments"></div>
+    </section>
 
-let i=0;
-(function type(){
-    if(i<msg.length){
-        typing.textContent+=msg[i++];
-        setTimeout(type,28);
-    }
-})();
+    <section class="slide">
+      <h2>Inference</h2>
+      <div class="content">
+        <p>Urea improves plant growth when applied in controlled quantity, mainly by supplying usable nitrogen for vegetative development.</p>
+        <p>Beyond the optimum range, urea may produce physiological stress and reduce plant performance. Therefore, plant response is dose-dependent rather than linearly increasing.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/growth-graph/960/540" alt="Image placeholder: bar graph of growth vs urea concentration"></div>
+    </section>
 
-/* Floating Hearts */
-setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="floatHeart";
-    h.innerHTML="❤";
-    h.style.left=Math.random()*innerWidth+"px";
-    h.style.top=(innerHeight-60)+"px";
-    h.style.fontSize=(20+Math.random()*30)+"px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),6000);
-},600);
+    <section class="slide">
+      <h2>Conclusion</h2>
+      <div class="content">
+        <p>Urea is a valuable nitrogen fertilizer that can significantly improve plant growth, leaf formation, and productivity when used in scientifically appropriate amounts.</p>
+        <p>However, excessive or unplanned use can harm plants, degrade soil health, and cause environmental pollution. Sustainable agriculture requires balanced fertilizer management, regular observation, and responsible application methods.</p>
+      </div>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/sustainable-farming/960/540" alt="Image placeholder: sustainable farming with balanced fertilizer use"></div>
+    </section>
 
-/* FIRST BUTTON */
-forgiveBtn.onclick=()=>{
-    messageBox.style.display="none";
-    forgiveBtn.style.display="none";
-    sorry.style.display="none";
-
-    const t="Thank you Madam💖";
-    thankYou.style.display="block";
-
-    let j=0;
-    (function write(){
-        if(j<t.length){
-            thankYou.textContent+=t[j++];
-            setTimeout(write,70);
-        }
-    })();
-
-    setTimeout(()=>moreBtn.style.display="block",1500);
-};
-
-/* SECOND BUTTON */
-moreBtn.onclick=()=>{
-    moreBtn.style.display="none";
-    thankYou.style.display="none";
-    c.style.transform="scale(1.06)";
-
-    const t="I love you the most Madam 💖💎";
-    loveYou.style.display="block";
-
-    let k=0;
-    (function typeLove(){
-        if(k<t.length){
-            loveYou.textContent+=t[k++];
-            setTimeout(typeLove,65);
-        }
-    })();
-
-    for(let n=0;n<40;n++){
-        setTimeout(()=>{
-            const p=document.createElement("div");
-            p.className="petal";
-            p.style.left=Math.random()*innerWidth+"px";
-            p.style.top="-20px";
-            document.body.appendChild(p);
-            setTimeout(()=>p.remove(),4000);
-        },n*120);
-    }
-};
-
-</script>
-
+    <section class="slide thank-you">
+      <h2>Thank You</h2>
+      <p class="subtitle">Effects of Urea on Plant Growth<br/>Prepared as a student science presentation.</p>
+      <div class="media-box"><img loading="lazy" src="https://picsum.photos/seed/thank-you-plant/960/540" alt="Image placeholder: thank you slide with plant illustration"></div>
+    </section>
+  </main>
 </body>
 </html>
